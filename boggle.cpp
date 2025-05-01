@@ -95,5 +95,32 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
 //add your solution here!
+	// base case: if position is out of bounds
+	if(c >= board.size() || r >= board.size()){
+		return false;
+	}
 
+	// add the character
+	word += board[r][c];
+
+	// check if its a not a complete word or prefix
+	if (prefix.find(word) == prefix.end() && dict.find(word) == dict.end()){
+		return false;
+	}
+
+	// recurse into the board
+	bool nextword = boggleHelper(dict, prefix, board, word, result, r + dr, c + dc, dr, dc);
+
+	// check if the word is a word
+	if(dict.find(word) != dict.end()){
+		// insert if a longer word can't be found
+		if(nextword == false){
+			// insert it
+			result.insert(word);
+			// return true because you inserted
+			return true;
+		}
+	}
+	// return the next recursive call
+	return nextword;
 }
